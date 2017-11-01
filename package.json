@@ -1,0 +1,33 @@
+{
+  "name": "@pocketberserker/akashic-pagination",
+  "version": "0.0.0",
+  "description": "Pagination for Akashic Engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc -p ./src",
+    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts"
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "pocketberserker/akashic-pagination.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "2.0.0",
+    "@xnv/headless-akashic": "0.0.1",
+    "@types/mocha": "2.2.43",
+    "@types/node": "8.0.28",
+    "espower-typescript": "8.1.1",
+    "mocha": "3.5.3",
+    "power-assert": "1.4.4",
+    "typescript": "2.5.3"
+  }
+}
