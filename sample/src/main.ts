@@ -10,8 +10,12 @@ module.exports = function() {
       y: 0,
       width: 100,
       height: 200,
-      limit: 8,
-      position: Position.Bottom
+      limit: {
+        vertical: 8,
+        horizontal: 1
+      },
+      position: Position.Bottom,
+      padding: 0
     });
     scene.append(pagination);
     const colors = [
