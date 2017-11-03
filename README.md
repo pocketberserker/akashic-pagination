@@ -1,9 +1,11 @@
-# cowlick-engine
+# akashic-pagination
 
-`cowlick` is a novel engine for [Akashic](https://akashic-games.github.io/).
+[![Build Status](https://travis-ci.org/pocketberserker/akashic-pagination.svg?branch=master)](https://travis-ci.org/pocketberserker/akashic-pagination)
+
+`akashic-pagination` is a library for [Akashic Engine](https://akashic-games.github.io/) that provides pagination entites.
 
 ## Usage
 
 ```bash
-npm i -S cowlick-engine
+npm i -S akashic-pagination
 ```

@@ -9,7 +9,10 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc -p ./src",
-    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts"
+    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts",
+    "sample:install": "cd sample && npm install",
+    "sample:build": "cd sample && npm run build",
+    "start": "cd sample && npm start"
   },
   "author": "pocketberserker",
   "license": "MIT",
