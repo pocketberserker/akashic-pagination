@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "webpack --progress && npm run scan:assets",
+    "start": "akashic-sandbox game",
+    "scan:assets": "cd ./game && akashic scan asset",
+    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../../docs/images/favicon.ico ../dist"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@akashic/akashic-cli": "1.2.1",
+    "@akashic/akashic-engine": "2.0.0",
+    "@akashic/akashic-sandbox": "0.13.4",
+    "@types/node": "8.0.33",
+    "ts-loader": "2.3.7",
+    "typescript": "2.5.3",
+    "webpack": "3.6.0"
+  }
+}
