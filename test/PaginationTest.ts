@@ -29,8 +29,12 @@ describe("Pagination", () => {
         y: 0,
         width: 100,
         height: 100,
-        limit: 8,
-        position: Position.Bottom
+        limit: {
+          vertical: 8,
+          horizontal: 1
+        },
+        position: Position.Bottom,
+        padding: 0
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({
@@ -42,6 +46,7 @@ describe("Pagination", () => {
         y: 10
       });
       pagination.content.append(redRect);
+      assert(redRect.x === 10);
       assert(redRect.y === 10);
       const blueRect = new g.FilledRect({
         scene,
@@ -52,6 +57,7 @@ describe("Pagination", () => {
         y: 10
       });
       pagination.content.append(blueRect);
+      assert(blueRect.x === 10);
       assert(blueRect.y === 30);
     });
   });
@@ -64,8 +70,12 @@ describe("Pagination", () => {
         y: 0,
         width: 100,
         height: 100,
-        limit: 1,
-        position: Position.Top
+        limit: {
+          vertical: 1,
+          horizontal: 1
+        },
+        position: Position.Top,
+        padding: 0
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({
@@ -77,6 +87,7 @@ describe("Pagination", () => {
         y: 10
       });
       pagination.content.append(redRect);
+      assert(redRect.x === 10);
       assert(redRect.y === 34);
     });
   });
@@ -87,10 +98,14 @@ describe("Pagination", () => {
         scene,
         x: 0,
         y: 0,
-        width: 100,
+        width: 200,
         height: 100,
-        limit: 1,
-        position: Position.Bottom
+        limit: {
+          vertical: 2,
+          horizontal: 2
+        },
+        position: Position.Bottom,
+        padding: 10
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({
@@ -102,6 +117,8 @@ describe("Pagination", () => {
         y: 10
       });
       pagination.content.append(redRect);
+      assert(redRect.x === 10);
+      assert(redRect.y === 10);
       const blueRect = new g.FilledRect({
         scene,
         cssColor: "blue",
@@ -113,6 +130,39 @@ describe("Pagination", () => {
       pagination.content.append(blueRect);
       assert(blueRect.x === 110);
       assert(blueRect.y === 10);
+      const yellowRect = new g.FilledRect({
+        scene,
+        cssColor: "yellow",
+        width: 80,
+        height: 10,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(yellowRect);
+      assert(yellowRect.x === 10);
+      assert(yellowRect.y === 30);
+      const greenRect = new g.FilledRect({
+        scene,
+        cssColor: "green",
+        width: 80,
+        height: 10,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(greenRect);
+      assert(greenRect.x === 110);
+      assert(greenRect.y === 30);
+      const blackRect = new g.FilledRect({
+        scene,
+        cssColor: "black",
+        width: 80,
+        height: 10,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(blackRect);
+      assert(blackRect.x === 210);
+      assert(blackRect.y === 10);
     });
   });
 });

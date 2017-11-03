@@ -8,32 +8,55 @@ export enum Position {
   Bottom
 }
 
+export interface Limit {
+  vertical: number;
+  horizontal: number;
+}
+
 export interface PaginationContentParameterObject extends g.EParameterObject {
-  limit: number;
+  limit: Limit;
   offset?: number;
+  padding: number;
 }
 
 export class PaginationContent extends g.E {
 
   private offset: number;
-  private limit: number;
+  private _limit: Limit;
   private _width: number;
+  private padding: number;
 
   constructor(param: PaginationContentParameterObject) {
     super(param);
-    this.limit = param.limit;
+    this._limit = param.limit;
     this.offset = param.offset ? param.offset : 0;
     this._width = this.width;
+    this.padding = param.padding;
     this.touchable = true;
   }
 
   append(e: g.E): void {
-    e.x = this.x + this._width * (this.lastOffset - this.offset) + e.x;
-    if(this.children && this.children.length % this.limit !== 0) {
-      const prev = this.children[this.children.length - 1];
-      e.y = this.y + prev.y + prev.height + e.y;
+    if(this.children) {
+      if(this.children.length % this._limit.horizontal !== 0 || this.children.length % this.limit === 0) {
+        const prev = this.children[this.children.length - 1];
+        e.x =  prev.x + prev.width + this.padding + e.x;
+      } else {
+        e.x = this.x + e.x;
+      }
     } else {
-      e.y = this.y + e.height;
+      e.x = this.x + e.x;
+    }
+    if(this.children) {
+      if(this.children.length % this.limit === 0) {
+        e.y = this.y + e.y;
+      } else if(this.children.length % this._limit.horizontal === 0) {
+        const prev = this.children[this.children.length - 1];
+        e.y = prev.y + prev.height + e.y;
+      } else {
+        e.y = this.children[this.children.length - 1].y;
+      }
+    } else {
+      e.y = this.y + e.y;
     }
     super.append(e);
   }
@@ -76,6 +99,10 @@ export class PaginationContent extends g.E {
     }
   }
 
+  private get limit() {
+    return this._limit.vertical * this._limit.horizontal;
+  }
+
   private move(target: number) {
     const current = this.offset;
     this.x = this.x + this._width * (current - target);
@@ -90,13 +117,14 @@ export class PaginationContent extends g.E {
 }
 
 export interface PaginationParameterObject extends g.PaneParameterObject {
-  limit: number;
+  limit: Limit;
   position: Position;
   previous?: Button;
   next?: Button;
   first?: boolean | Button;
   last?: boolean | Button;
   offset?: number;
+  padding: number;
 }
 
 export class Pagination extends g.Pane {
@@ -130,7 +158,8 @@ export class Pagination extends g.Pane {
       height: param.height,
       y: contentY,
       limit: param.limit,
-      offset: param.offset
+      offset: param.offset,
+      padding: param.padding
     });
     this.append(this._content);
 
