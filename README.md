@@ -7,5 +7,5 @@
 ## Usage
 
 ```bash
-npm i -S akashic-pagination
+npm i -S @pocketberserker/akashic-pagination
 ```
