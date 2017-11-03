@@ -9,3 +9,8 @@
 ```bash
 npm i -S @pocketberserker/akashic-pagination
 ```
+
+## Documents
+
+* [Samples](https://pocketberserker.github.io/akashic-pagination/)
+

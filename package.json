@@ -12,6 +12,8 @@
     "test": "mocha --compilers ts:espower-typescript/guess test/*.ts",
     "sample:install": "cd sample && npm install",
     "sample:build": "cd sample && npm run build",
+    "sample:bundle": "cd sample && npm run bundle",
+    "sample:publish": "gh-pages -d ./sample/dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
     "start": "cd sample && npm start"
   },
   "author": "pocketberserker",
@@ -21,14 +23,14 @@
     "type": "git",
     "url": "pocketberserker/akashic-pagination.git"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
-    "@xnv/headless-akashic": "0.0.1",
     "@types/mocha": "2.2.43",
     "@types/node": "8.0.28",
+    "@xnv/headless-akashic": "0.0.1",
     "espower-typescript": "8.1.1",
+    "gh-pages": "1.0.0",
     "mocha": "3.5.3",
     "power-assert": "1.4.4",
     "typescript": "2.5.3"
