@@ -148,7 +148,8 @@ export class Pagination extends g.Pane {
     this.append(this._content);
 
     this.touchable = true;
-    this.previous = param.previous ? param.previous : new LabelButton({ scene: param.scene, width: param.width / 4, text: "<", image: this._image });
+    const buttonWidth = Math.round(param.width / 4);
+    this.previous = param.previous ? param.previous : new LabelButton({ scene: param.scene, width: buttonWidth, text: "<", image: this._image });
     this.previous.onClick.add(
       () => this._content.previous(),
       this
@@ -165,7 +166,7 @@ export class Pagination extends g.Pane {
     }
     this.previous.y = buttonY;
     this.append(this.previous);
-    this.next = param.next ? param.next : new LabelButton({ scene: param.scene, width: param.width / 4, text: ">", image: this._image });
+    this.next = param.next ? param.next : new LabelButton({ scene: param.scene, width: buttonWidth, text: ">", image: this._image });
     this.next.onClick.add(
       () => this._content.next(),
       this
@@ -174,7 +175,7 @@ export class Pagination extends g.Pane {
     this.next.y = buttonY;
     this.append(this.next);
     if(param.first) {
-      this.first = param.first === true ? new LabelButton({ scene: param.scene, width: param.width / 4, text: "|<", image: this._image })
+      this.first = param.first === true ? new LabelButton({ scene: param.scene, width: buttonWidth, text: "|<", image: this._image })
         : param.first;
       this.first.onClick.add(
         () => this._content.first(),
@@ -185,7 +186,7 @@ export class Pagination extends g.Pane {
       this.append(this.first);
     }
     if(param.last) {
-      this.last = param.last === true ? new LabelButton({ scene: param.scene, width: param.width / 4, text: ">|", image: this._image })
+      this.last = param.last === true ? new LabelButton({ scene: param.scene, width: buttonWidth, text: ">|", image: this._image })
         : param.last;
       this.last.onClick.add(
         () => this._content.last(),

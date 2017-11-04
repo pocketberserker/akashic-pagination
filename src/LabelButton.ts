@@ -21,7 +21,7 @@ export class LabelButton extends g.Pane implements Button {
       width: param.width,
       height: param.image.height,
       backgroundImage: param.image,
-      backgroundEffector: new g.NinePatchSurfaceEffector(param.scene.game, Math.floor(param.image.width / 2)),
+      backgroundEffector: param.image && new g.NinePatchSurfaceEffector(param.scene.game),
       touchable: true
     });
     this.onClick = new g.Trigger<void>();
