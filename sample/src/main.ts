@@ -15,7 +15,9 @@ module.exports = function() {
         horizontal: 1
       },
       position: Position.Bottom,
-      paddingRight: 10
+      paddingRight: 10,
+      first: true,
+      last: true
     });
     scene.append(pagination);
     const colors = [
