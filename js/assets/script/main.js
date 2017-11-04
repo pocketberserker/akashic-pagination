@@ -90,11 +90,11 @@ var LabelButton = /** @class */ (function (_super) {
             width: param.width,
             height: param.image.height,
             backgroundImage: param.image,
-            backgroundEffector: new g.NinePatchSurfaceEffector(param.scene.game, Math.floor(param.image.width / 2)),
+            backgroundEffector: param.image && new g.NinePatchSurfaceEffector(param.scene.game),
             touchable: true
         }) || this;
         _this.onClick = new g.Trigger();
-        var font = new g.DynamicFont({
+        var font = param.font ? param.font : new g.DynamicFont({
             game: param.scene.game,
             fontFamily: g.FontFamily.SansSerif,
             size: 15
@@ -103,7 +103,7 @@ var LabelButton = /** @class */ (function (_super) {
             scene: param.scene,
             font: font,
             text: param.text,
-            fontSize: 18,
+            fontSize: param.fontSize ? param.fontSize : 18,
             textColor: "white",
         });
         _this.label.aligning(_this.width, g.TextAlign.Center);
@@ -330,7 +330,7 @@ var Pagination = /** @class */ (function (_super) {
                 contentY = param.previous ? param.previous.height : _this._image.height;
                 break;
             default:
-                contentY = param.y ? param.y : 0;
+                contentY = 0;
                 break;
         }
         _this._content = new PaginationContent({
@@ -343,7 +343,8 @@ var Pagination = /** @class */ (function (_super) {
         });
         _this.append(_this._content);
         _this.touchable = true;
-        _this.previous = param.previous ? param.previous : new LabelButton_1.LabelButton({ scene: param.scene, width: param.width / 4, text: "<", image: _this._image });
+        var buttonWidth = Math.round(param.width / 4);
+        _this.previous = param.previous ? param.previous : new LabelButton_1.LabelButton({ scene: param.scene, width: buttonWidth, text: "<", image: _this._image });
         _this.previous.onClick.add(function () { return _this._content.previous(); }, _this);
         _this.previous.x = param.width / 4;
         var buttonY;
@@ -357,13 +358,13 @@ var Pagination = /** @class */ (function (_super) {
         }
         _this.previous.y = buttonY;
         _this.append(_this.previous);
-        _this.next = param.next ? param.next : new LabelButton_1.LabelButton({ scene: param.scene, width: param.width / 4, text: ">", image: _this._image });
+        _this.next = param.next ? param.next : new LabelButton_1.LabelButton({ scene: param.scene, width: buttonWidth, text: ">", image: _this._image });
         _this.next.onClick.add(function () { return _this._content.next(); }, _this);
         _this.next.x = param.width / 2;
         _this.next.y = buttonY;
         _this.append(_this.next);
         if (param.first) {
-            _this.first = param.first === true ? new LabelButton_1.LabelButton({ scene: param.scene, width: param.width / 4, text: "|<", image: _this._image })
+            _this.first = param.first === true ? new LabelButton_1.LabelButton({ scene: param.scene, width: buttonWidth, text: "|<", image: _this._image })
                 : param.first;
             _this.first.onClick.add(function () { return _this._content.first(); }, _this);
             _this.first.x = 0;
@@ -371,7 +372,7 @@ var Pagination = /** @class */ (function (_super) {
             _this.append(_this.first);
         }
         if (param.last) {
-            _this.last = param.last === true ? new LabelButton_1.LabelButton({ scene: param.scene, width: param.width / 4, text: ">|", image: _this._image })
+            _this.last = param.last === true ? new LabelButton_1.LabelButton({ scene: param.scene, width: buttonWidth, text: ">|", image: _this._image })
                 : param.last;
             _this.last.onClick.add(function () { return _this._content.last(); }, _this);
             _this.last.x = param.width / 4 * 3;
@@ -395,6 +396,7 @@ var Pagination = /** @class */ (function (_super) {
         this.next = null; // ditto.
         this.first = null; // ditto.
         this.last = null; // ditto.
+        this._content = null; // ditto.
         if (this._image) {
             this._image.destroy();
             this._image = null;
@@ -414,10 +416,12 @@ exports.Pagination = Pagination;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function createDefaultButtonImage(game, width, height, color) {
-    var s = game.resourceFactory.createSurface(Math.round(width), Math.round(height));
+    var w = Math.round(width);
+    var h = Math.round(height);
+    var s = game.resourceFactory.createSurface(w, h);
     var r = s.renderer();
     r.begin();
-    r.fillRect(0, 0, width, height, color);
+    r.fillRect(0, 0, w, h, color);
     r.end();
     return s;
 }
