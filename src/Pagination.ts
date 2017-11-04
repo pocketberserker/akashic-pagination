@@ -24,6 +24,7 @@ export class PaginationContent extends g.E {
   private _limit: Limit;
   private _width: number;
   private padding: number;
+  private lastOffset: number;
 
   constructor(param: PaginationContentParameterObject) {
     super(param);
@@ -31,6 +32,7 @@ export class PaginationContent extends g.E {
     this.offset = 0;
     this._width = this.width;
     this.padding = param.padding;
+    this.lastOffset = 0;
     this.touchable = true;
   }
 
@@ -48,6 +50,8 @@ export class PaginationContent extends g.E {
       }
     }
     super.append(e);
+    const l = Math.floor(this.children.length / this.limit);
+    this.lastOffset = this.children.length % this.limit === 0 ? l - 1 : l;
   }
 
   previous(): void {
@@ -69,30 +73,23 @@ export class PaginationContent extends g.E {
   }
 
   last(): void {
-    const l = this.lastOffset;
-    if(this.offset < l) {
-      this.move(l);
+    if(this.offset < this.lastOffset) {
+      this.move(this.lastOffset);
     }
   }
 
   move(target: number) {
-    const current = this.offset;
-    this.x = this.x + this._width * (current - target);
-    this.offset = target;
-    this.modified();
+    if(this.offset !== target && target >= 0 && target <= this.lastOffset) {
+      const current = this.offset;
+      this.x = this.x + this._width * (current - target);
+      this.offset = target;
+      this.modified();
+    }
   }
 
   modified(isBubbling?: boolean): void {
     this.resize();
     super.modified(isBubbling);
-  }
-
-  private get lastOffset() {
-    if(this.children) {
-      return Math.floor(this.children.length / this.limit);
-    } else {
-      return 0;
-    }
   }
 
   private get limit() {
