@@ -6,6 +6,8 @@ export interface LabelButtonParameterObject {
   width: number;
   text: string;
   image: g.Surface;
+  font?: g.Font;
+  fontSize?: number;
 }
 
 export class LabelButton extends g.Pane implements Button {
@@ -23,7 +25,7 @@ export class LabelButton extends g.Pane implements Button {
       touchable: true
     });
     this.onClick = new g.Trigger<void>();
-    const font = new g.DynamicFont({
+    const font = param.font ? param.font : new g.DynamicFont({
       game: param.scene.game,
       fontFamily: g.FontFamily.SansSerif,
       size: 15
@@ -32,7 +34,7 @@ export class LabelButton extends g.Pane implements Button {
       scene: param.scene,
       font,
       text: param.text,
-      fontSize: 18,
+      fontSize: param.fontSize ? param.fontSize : 18,
       textColor: "white",
     });
     this.label.aligning(this.width, g.TextAlign.Center);
