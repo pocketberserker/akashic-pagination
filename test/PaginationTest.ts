@@ -92,6 +92,46 @@ describe("Pagination", () => {
     });
   });
 
+  it("can be moved offset", () => {
+    return prepareScene((game, scene) => {
+      const pagination = new Pagination({
+        scene,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        limit: {
+          vertical: 1,
+          horizontal: 1
+        },
+        position: Position.Bottom,
+        padding: 0
+      });
+      scene.append(pagination);
+      const redRect = new g.FilledRect({
+        scene,
+        cssColor: "red",
+        width: 80,
+        height: 10,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(redRect);
+      const blueRect = new g.FilledRect({
+        scene,
+        cssColor: "blue",
+        width: 80,
+        height: 2,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(blueRect);
+
+      pagination.moveOffset(1);
+      assert(pagination.content.x === -100);
+    });
+  });
+
   it("can be set limit", () => {
     return prepareScene((game, scene) => {
       const pagination = new Pagination({
