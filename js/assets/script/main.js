@@ -133,18 +133,24 @@ exports.LabelButton = LabelButton;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var akashic_pagination_1 = __webpack_require__(2);
+var index_1 = __webpack_require__(2);
 module.exports = function () {
     var scene = new g.Scene({ game: g.game });
     scene.loaded.add(function () {
-        var pagination = new akashic_pagination_1.Pagination({
+        var pagination = new index_1.Pagination({
             scene: scene,
             x: 0,
             y: 0,
             width: 100,
             height: 200,
-            limit: 8,
-            position: akashic_pagination_1.Position.Bottom
+            limit: {
+                vertical: 8,
+                horizontal: 1
+            },
+            position: index_1.Position.Bottom,
+            paddingRight: 10,
+            first: true,
+            last: true
         });
         scene.append(pagination);
         var colors = [
@@ -164,6 +170,31 @@ module.exports = function () {
                 y: 10
             });
             pagination.content.append(rect);
+        }
+        var multiColumn = new index_1.Pagination({
+            scene: scene,
+            x: 100,
+            y: 0,
+            width: 150,
+            height: 150,
+            limit: {
+                vertical: 5,
+                horizontal: 5
+            },
+            position: index_1.Position.Bottom,
+            paddingRight: 10
+        });
+        scene.append(multiColumn);
+        for (var i = 0; i < 100; i++) {
+            var rect = new g.FilledRect({
+                scene: scene,
+                cssColor: colors[g.game.random.get(0, 4)],
+                width: 10,
+                height: 10,
+                x: 10,
+                y: 10
+            });
+            multiColumn.content.append(rect);
         }
     });
     g.game.pushScene(scene);
@@ -212,22 +243,32 @@ var PaginationContent = /** @class */ (function (_super) {
     __extends(PaginationContent, _super);
     function PaginationContent(param) {
         var _this = _super.call(this, param) || this;
-        _this.limit = param.limit;
-        _this.offset = param.offset ? param.offset : 0;
+        _this._limit = param.limit;
+        _this.offset = 0;
         _this._width = _this.width;
+        _this.padding = param.padding;
+        _this.lastOffset = 0;
         _this.touchable = true;
         return _this;
     }
     PaginationContent.prototype.append = function (e) {
-        e.x = this.x + this._width * (this.lastOffset - this.offset) + e.x;
-        if (this.children && this.children.length % this.limit !== 0) {
+        if (this.children) {
             var prev = this.children[this.children.length - 1];
-            e.y = this.y + prev.y + prev.height + e.y;
-        }
-        else {
-            e.y = this.y + e.height;
+            if (this.children.length % this.limit === 0) {
+                e.x = prev.x + prev.width + this.padding + e.x;
+            }
+            else if (this.children.length % this._limit.horizontal === 0) {
+                e.x = this.children[this.children.length - this._limit.horizontal].x;
+                e.y = prev.y + prev.height + e.y;
+            }
+            else {
+                e.x = prev.x + prev.width + this.padding + e.x;
+                e.y = prev.y;
+            }
         }
         _super.prototype.append.call(this, e);
+        var l = Math.floor(this.children.length / this.limit);
+        this.lastOffset = this.children.length % this.limit === 0 ? l - 1 : l;
     };
     PaginationContent.prototype.previous = function () {
         if (this.offset > 0) {
@@ -245,33 +286,29 @@ var PaginationContent = /** @class */ (function (_super) {
         }
     };
     PaginationContent.prototype.last = function () {
-        var l = this.lastOffset;
-        if (this.offset < l) {
-            this.move(l);
+        if (this.offset < this.lastOffset) {
+            this.move(this.lastOffset);
+        }
+    };
+    PaginationContent.prototype.move = function (target) {
+        if (this.offset !== target && target >= 0 && target <= this.lastOffset) {
+            var current = this.offset;
+            this.x = this.x + this._width * (current - target);
+            this.offset = target;
+            this.modified();
         }
     };
     PaginationContent.prototype.modified = function (isBubbling) {
         this.resize();
         _super.prototype.modified.call(this, isBubbling);
     };
-    Object.defineProperty(PaginationContent.prototype, "lastOffset", {
+    Object.defineProperty(PaginationContent.prototype, "limit", {
         get: function () {
-            if (this.children) {
-                return Math.floor(this.children.length / this.limit);
-            }
-            else {
-                return 0;
-            }
+            return this._limit.vertical * this._limit.horizontal;
         },
         enumerable: true,
         configurable: true
     });
-    PaginationContent.prototype.move = function (target) {
-        var current = this.offset;
-        this.x = this.x + this._width * (current - target);
-        this.offset = target;
-        this.modified();
-    };
     PaginationContent.prototype.resize = function () {
         var last = this.children[this.children.length - 1];
         this.width = Math.max(this.width, last.x + last.width);
@@ -302,7 +339,7 @@ var Pagination = /** @class */ (function (_super) {
             height: param.height,
             y: contentY,
             limit: param.limit,
-            offset: param.offset
+            padding: param.paddingRight
         });
         _this.append(_this._content);
         _this.touchable = true;
@@ -350,6 +387,9 @@ var Pagination = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Pagination.prototype.moveOffset = function (target) {
+        this._content.move(target);
+    };
     Pagination.prototype.destroy = function () {
         this.previous = null; // destroy() called as destroying this.children.
         this.next = null; // ditto.
@@ -374,7 +414,7 @@ exports.Pagination = Pagination;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function createDefaultButtonImage(game, width, height, color) {
-    var s = game.resourceFactory.createSurface(width, height);
+    var s = game.resourceFactory.createSurface(Math.round(width), Math.round(height));
     var r = s.renderer();
     r.begin();
     r.fillRect(0, 0, width, height, color);
