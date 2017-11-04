@@ -34,7 +34,7 @@ describe("Pagination", () => {
           horizontal: 1
         },
         position: Position.Bottom,
-        padding: 0
+        paddingRight: 0
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({
@@ -75,20 +75,10 @@ describe("Pagination", () => {
           horizontal: 1
         },
         position: Position.Top,
-        padding: 0
+        paddingRight: 0
       });
       scene.append(pagination);
-      const redRect = new g.FilledRect({
-        scene,
-        cssColor: "red",
-        width: 80,
-        height: 10,
-        x: 10,
-        y: 10
-      });
-      pagination.content.append(redRect);
-      assert(redRect.x === 10);
-      assert(redRect.y === 34);
+      assert(pagination.content.y === 24);
     });
   });
 
@@ -105,7 +95,7 @@ describe("Pagination", () => {
           horizontal: 1
         },
         position: Position.Bottom,
-        padding: 0
+        paddingRight: 0
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({
@@ -145,7 +135,7 @@ describe("Pagination", () => {
           horizontal: 2
         },
         position: Position.Bottom,
-        padding: 10
+        paddingRight: 10
       });
       scene.append(pagination);
       const redRect = new g.FilledRect({

@@ -36,26 +36,16 @@ export class PaginationContent extends g.E {
 
   append(e: g.E): void {
     if(this.children) {
-      if(this.children.length % this._limit.horizontal !== 0 || this.children.length % this.limit === 0) {
-        const prev = this.children[this.children.length - 1];
-        e.x =  prev.x + prev.width + this.padding + e.x;
-      } else {
-        e.x = this.x + e.x;
-      }
-    } else {
-      e.x = this.x + e.x;
-    }
-    if(this.children) {
+      const prev = this.children[this.children.length - 1];
       if(this.children.length % this.limit === 0) {
-        e.y = this.y + e.y;
+        e.x =  prev.x + prev.width + this.padding + e.x;
       } else if(this.children.length % this._limit.horizontal === 0) {
-        const prev = this.children[this.children.length - 1];
+        e.x = this.children[this.children.length - this._limit.horizontal].x;
         e.y = prev.y + prev.height + e.y;
       } else {
-        e.y = this.children[this.children.length - 1].y;
+        e.x =  prev.x + prev.width + this.padding + e.x;
+        e.y = prev.y;
       }
-    } else {
-      e.y = this.y + e.y;
     }
     super.append(e);
   }
@@ -122,7 +112,7 @@ export interface PaginationParameterObject extends g.PaneParameterObject {
   next?: Button;
   first?: boolean | Button;
   last?: boolean | Button;
-  padding: number;
+  paddingRight: number;
 }
 
 export class Pagination extends g.Pane {
@@ -156,7 +146,7 @@ export class Pagination extends g.Pane {
       height: param.height,
       y: contentY,
       limit: param.limit,
-      padding: param.padding
+      padding: param.paddingRight
     });
     this.append(this._content);
 
