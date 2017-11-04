@@ -1,6 +1,6 @@
 {
   "name": "@pocketberserker/akashic-pagination",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Pagination for Akashic Engine",
   "main": "lib/index.js",
   "files": [
