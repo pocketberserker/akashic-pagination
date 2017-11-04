@@ -211,6 +211,7 @@ export class Pagination extends g.Pane {
     this.next = null; // ditto.
     this.first = null; // ditto.
     this.last = null; // ditto.
+    this._content = null; // ditto.
     if(this._image) {
       this._image.destroy();
       this._image = null;
