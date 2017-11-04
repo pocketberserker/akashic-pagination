@@ -134,7 +134,7 @@ export class Pagination extends g.Pane {
         contentY = param.previous ? param.previous.height : this._image.height;
         break;
       default:
-        contentY = param.y ? param.y : 0;
+        contentY = 0;
         break;
     }
     this._content = new PaginationContent({
