@@ -15,7 +15,6 @@ export interface Limit {
 
 export interface PaginationContentParameterObject extends g.EParameterObject {
   limit: Limit;
-  offset?: number;
   padding: number;
 }
 
@@ -29,7 +28,7 @@ export class PaginationContent extends g.E {
   constructor(param: PaginationContentParameterObject) {
     super(param);
     this._limit = param.limit;
-    this.offset = param.offset ? param.offset : 0;
+    this.offset = 0;
     this._width = this.width;
     this.padding = param.padding;
     this.touchable = true;
@@ -86,6 +85,13 @@ export class PaginationContent extends g.E {
     }
   }
 
+  move(target: number) {
+    const current = this.offset;
+    this.x = this.x + this._width * (current - target);
+    this.offset = target;
+    this.modified();
+  }
+
   modified(isBubbling?: boolean): void {
     this.resize();
     super.modified(isBubbling);
@@ -103,13 +109,6 @@ export class PaginationContent extends g.E {
     return this._limit.vertical * this._limit.horizontal;
   }
 
-  private move(target: number) {
-    const current = this.offset;
-    this.x = this.x + this._width * (current - target);
-    this.offset = target;
-    this.modified();
-  }
-
   private resize(): void {
     const last = this.children[this.children.length - 1];
     this.width = Math.max(this.width, last.x + last.width);
@@ -123,7 +122,6 @@ export interface PaginationParameterObject extends g.PaneParameterObject {
   next?: Button;
   first?: boolean | Button;
   last?: boolean | Button;
-  offset?: number;
   padding: number;
 }
 
@@ -158,7 +156,6 @@ export class Pagination extends g.Pane {
       height: param.height,
       y: contentY,
       limit: param.limit,
-      offset: param.offset,
       padding: param.padding
     });
     this.append(this._content);
@@ -215,6 +212,10 @@ export class Pagination extends g.Pane {
 
   get content(): g.E {
     return this._content;
+  }
+
+  moveOffset(target: number): void {
+    this._content.move(target);
   }
 
   destroy(): void {
