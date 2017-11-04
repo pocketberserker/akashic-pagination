@@ -6,7 +6,7 @@ export function createDefaultButtonImage(
   height: number,
   color: string
 ): g.Surface {
-  const s = game.resourceFactory.createSurface(width, height);
+  const s = game.resourceFactory.createSurface(Math.round(width), Math.round(height));
   const r = s.renderer();
   r.begin();
   r.fillRect(0, 0, width, height, color);
