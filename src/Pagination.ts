@@ -88,7 +88,9 @@ export class PaginationContent extends g.E {
   }
 
   modified(isBubbling?: boolean): void {
-    this.resize();
+    if(! this.destroyed) {
+      this.resize();
+    }
     super.modified(isBubbling);
   }
 
