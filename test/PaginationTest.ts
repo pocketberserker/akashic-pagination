@@ -195,4 +195,39 @@ describe("Pagination", () => {
       assert(blackRect.y === 10);
     });
   });
+
+  it("never throws while scene transition", () => {
+    return prepareScene((game, scene) => {
+      const pagination = new Pagination({
+        scene,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        limit: {
+          vertical: 1,
+          horizontal: 1
+        },
+        position: Position.Top,
+        paddingRight: 0
+      });
+      scene.append(pagination);
+      const redRect = new g.FilledRect({
+        scene,
+        cssColor: "red",
+        width: 80,
+        height: 10,
+        x: 10,
+        y: 10
+      });
+      pagination.content.append(redRect);
+      return new Promise<void>((resolve, reject) => {
+        scene.setTimeout(function () {
+          var nextScene = new g.Scene({ game });
+          nextScene.loaded.add(() => resolve());
+          game.replaceScene(nextScene);
+        }, 1);
+      });
+    });
+  });
 });
